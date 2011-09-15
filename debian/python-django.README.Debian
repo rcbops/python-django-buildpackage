@@ -1,0 +1,178 @@
+0.96 -> 1.0
+===========
+
+Django 1.0 has a number of backwards-incompatible changes from Django
+0.96. If you have apps written against Django 0.96 that you need to port,
+see the detailed porting guide:
+/usr/share/doc/python-django/html/releases/1.0-porting-guide.html
+or
+http://docs.djangoproject.com/en/dev/releases/1.0-porting-guide/
+
+You can also find a complete list of of backwards incompatible changes
+here:
+http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges
+
+0.95 -> 0.96
+============
+
+Information here has been gathered from:
+    http://www.djangoproject.com/documentation/release_notes_0.96/
+and
+    http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges
+
+Backwards Incompatible Changes
+------------------------------
+
+    Database constraint names changed
+    =================================
+
+    As of [3512], the format of the constraint names Django generates for
+    foreign key references changed slightly. These names are only used
+    sometimes, when it is not possible to put the reference directly on the
+    affected column, so this is not always visible.
+
+    The effect of this change is that manage.py reset app_name and similar
+    commands may generate SQL with invalid constraint names and thus generate
+    an error when run against the database (the database server will complain
+    about the constraint not existing). To fix this, you will need to tweak the
+    output of manage.py sqlreset app_name to match the correct constraint names
+    and pass the results to the database server manually. 
+
+    Backslash escaping changed
+    ==========================
+
+    As of [3552], the Django database API now escapes backslashes given as
+    query parameters. If you have any database API code that match backslashes,
+    and it was working before (despite the broken escaping), you'll have to
+    change your code to "unescape" the slashes one level.
+
+    For example, this used to work:
+
+    # Code that matches a single backslash
+    MyModel.objects.filter(text__contains='\\\\')
+
+    But it should be rewritten as this:
+
+    # Code that matches a single backslash
+    MyModel.objects.filter(text__contains='\\')
+
+    Removed ENABLE_PSYCO setting
+    ============================
+
+    As of [3877], the ENABLE_PSYCO setting no longer exists. If your settings
+    file includes ENABLE_PSYCO, nothing will break per se, but it just won't do
+    anything. If you want to use Psyco with Django, write some custom
+    middleware that activates Psyco.
+
+    Changed Admin.manager option to more flexible hook
+    ==================================================
+
+    As of [4342], the manager option to class Admin no longer exists. This
+    option was undocumented, but we're mentioning the change here in case you
+    used it. In favor of this option, class Admin may now define one of these
+    methods:
+
+        * queryset()
+        * queryset_add()
+        * queryset_change() 
+
+    These give you much more flexibility.
+
+    Note that this change was made to the NewformsAdminBranch. (We initially
+    called the new method change_list_queryset, but this was changed in [4584]
+    to be more flexible.) The change will not be made to trunk until that
+    branch is merged to trunk.
+
+    Changed prepopulate_from to be defined in the Admin class, 
+    not database field classes ¶
+    ==========================================================
+
+    As of [4446], the prepopulate_from option to database fields no
+    longer exists. It's been discontinued in favor of the new
+    prepopulated_fields option on class Admin. The new
+    prepopulated_fields option, if given, should be a dictionary
+    mapping field names to lists/tuples of field names. Here's an
+    example comparing old syntax and new syntax:
+
+    # OLD:
+    class MyModel(models.Model):
+        first_name = models.CharField(maxlength=30)
+        last_name = models.CharField(maxlength=30)
+        slug = models.CharField(maxlength=60, prepopulate_from=('first_name', 'last_name'))
+
+        class Admin:
+            pass
+
+    # NEW:
+    class MyModel(models.Model):
+        first_name = models.CharField(maxlength=30)
+        last_name = models.CharField(maxlength=30)
+        slug = models.CharField(maxlength=60)
+
+        class Admin:
+            prepopulated_fields = {'slug': ('first_name', 'last_name')}
+
+    Moved admin doc views into django.contrib.admindocs
+    ====================================================
+
+    As of [4585], the documentation views for the Django admin site were moved
+    into a new package, django.contrib.admindocs.
+
+    The admin docs, which aren't documented very well, were located at docs/ in
+    the admin site. They're also linked-to by the "Documentation" link in the
+    upper right of default admin templates.
+
+    Because we've moved the doc views, you now have to activate admin docs
+    explicitly. Do this by adding the following line to your URLconf:
+
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    Note that this change was made to the NewformsAdminBranch. The change will
+    not be made to trunk until that branch is merged to trunk.
+
+    Enforcing MySQLdb version
+    =========================
+
+    As of [4724], Django will raise an error if you try to use the MySQL
+    backend with a MySQLdb ( MySQL python module) version earlier than 1.2.1p2.
+    There were significant, production-related bugs in earlier versions, so we
+    have upgraded the minimum requirement.
+
+    In [4767], a mysql_old backend was added, that is identical to the original
+    mysql backend prior to the change in [4724]. This backend can be used if
+    upgrading the MySQLdb module is not immediately possible, however, it is
+    deprecated and no further development will be done on it. 
+
+New Features
+------------
+    
+    New forms library
+    =================
+
+    The new forms library has been merged from the new forms branch in to
+    django.newforms in 0.96, the next revision will replace django.forms with
+    django.newforms, the current forms library is already copied to
+    django.oldforms to make the transition easier - it's advised to either
+    upgrade your forms code to the newforms library or to change your imports
+    as follows:
+        
+        from django import forms
+    becomes
+        from django import oldforms as forms
+    
+    URLconf improvements
+    ====================
+    
+    It's now possible to use imported views in the urlconf rather than a string
+    representing the view to call.
+
+    Test framework
+    ==============
+
+    Now possible to write tests based on doctest and unittest
+
+    Admin area changes
+    ==================
+
+    Changes to the user adding and updating views so that you don't need to
+    worry about hashed passwords.

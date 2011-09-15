@@ -1,0 +1,56 @@
+Source: python-django
+Section: python
+Priority: optional
+Maintainer: Chris Lamb <lamby@debian.org>
+Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>, Raphaël Hertzog <hertzog@debian.org>
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 7.0.50), python (>= 2.6.6-3~), python-sphinx (>= 1.0.7+dfsg), locales
+Build-Depends-Indep: libjs-jquery
+Homepage: http://www.djangoproject.com/
+Vcs-Svn: svn://svn.debian.org/python-modules/packages/python-django/trunk/
+Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/python-django/trunk/
+
+Package: python-django
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Recommends: libjs-jquery
+Suggests: python-psycopg2, python-psycopg, python-mysqldb, python-flup, python-sqlite, python-yaml
+Description: High-level Python web development framework
+ Django is a high-level web application framework that loosely follows the
+ model-view-controller design pattern.
+ .
+ Python's equivalent to Ruby on Rails, Django lets you build complex
+ data-driven websites quickly and easily - Django focuses on automating as much
+ as possible and adhering to the "Don't Repeat Yourself" (DRY) principle.
+ .
+ Django additionally emphasizes reusability and "pluggability" of components;
+ many generic third-party "applications" are available to enhance projects or
+ to simply to reduce development time even further.
+ .
+ Notable features include:
+  * An object-relational mapper (ORM)
+  * Automatic admin interface
+  * Elegant URL dispatcher
+  * Form serialization and validation system
+  * Templating system
+  * Lightweight, standalone web server for development and testing
+  * Internationalization support
+  * Testing framework and client
+
+Package: python-django-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}, ${sphinxdoc:Depends}
+Description: High-level Python web development framework (documentation)
+ Django is a high-level web application framework that loosely follows the
+ model-view-controller design pattern.
+ .
+ Python's equivalent to Ruby on Rails, Django lets you build complex
+ data-driven websites quickly and easily - Django focuses on automating as much
+ as possible and adhering to the "Don't Repeat Yourself" (DRY) principle.
+ .
+ Django additionally emphasizes reusability and "pluggability" of components;
+ many generic third-party "applications" are available to enhance projects or
+ to simply to reduce development time even further.
+ .
+ This package contains the HTML documentation and example projects.

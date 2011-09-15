@@ -1,0 +1,97 @@
+Description: Drop regression tests that require an internet connection
+ This is a Debian specific patch because source packages should be
+ buildable without any internet connection.
+Author: Chris Lamb <lamby@debian.org>
+Author: Evgeni Golov <evgeni@debian.org>
+Forwarded: not-needed
+Origin: vendor
+
+--- a/tests/regressiontests/forms/tests/error_messages.py
++++ b/tests/regressiontests/forms/tests/error_messages.py
+@@ -139,17 +139,6 @@ class FormsErrorMessagesTestCase(unittes
+         self.assertFormErrors([u'EMPTY FILE'], f.clean, SimpleUploadedFile('name', None))
+         self.assertFormErrors([u'EMPTY FILE'], f.clean, SimpleUploadedFile('name', ''))
+ 
+-    def test_urlfield(self):
+-        e = {
+-            'required': 'REQUIRED',
+-            'invalid': 'INVALID',
+-            'invalid_link': 'INVALID LINK',
+-        }
+-        f = URLField(verify_exists=True, error_messages=e)
+-        self.assertFormErrors([u'REQUIRED'], f.clean, '')
+-        self.assertFormErrors([u'INVALID'], f.clean, 'abc.c')
+-        self.assertFormErrors([u'INVALID LINK'], f.clean, 'http://www.broken.djangoproject.com')
+-
+     def test_booleanfield(self):
+         e = {
+             'required': 'REQUIRED',
+--- a/tests/modeltests/validation/tests.py
++++ b/tests/modeltests/validation/tests.py
+@@ -53,23 +53,6 @@ class BaseModelValidationTests(Validatio
+         mtv = ModelToValidate(number=10, name='Some Name', url='not a url')
+         self.assertFieldFailsValidationWithMessage(mtv.full_clean, 'url', [u'Enter a valid value.'])
+ 
+-    #The tests below which use url_verify are deprecated
+-    def test_correct_url_but_nonexisting_gives_404(self):
+-        mtv = ModelToValidate(number=10, name='Some Name', url_verify='http://qa-dev.w3.org/link-testsuite/http.php?code=404')
+-        self.assertFieldFailsValidationWithMessage(mtv.full_clean, 'url_verify', [u'This URL appears to be a broken link.'])
+-
+-    def test_correct_url_value_passes(self):
+-        mtv = ModelToValidate(number=10, name='Some Name', url_verify='http://www.google.com/')
+-        self.assertEqual(None, mtv.full_clean()) # This will fail if there's no Internet connection
+-
+-    def test_correct_url_with_redirect(self):
+-        mtv = ModelToValidate(number=10, name='Some Name', url_verify='http://qa-dev.w3.org/link-testsuite/http.php?code=301') #example.com is a redirect to iana.org now
+-        self.assertEqual(None, mtv.full_clean()) # This will fail if there's no Internet connection
+-
+-    def test_correct_https_url_but_nonexisting(self):
+-        mtv = ModelToValidate(number=10, name='Some Name', url_verify='https://www.example.com/')
+-        self.assertFieldFailsValidationWithMessage(mtv.full_clean, 'url_verify', [u'This URL appears to be a broken link.'])
+-
+     def test_text_greater_that_charfields_max_length_raises_erros(self):
+         mtv = ModelToValidate(number=10, name='Some Name'*100)
+         self.assertFailsValidation(mtv.full_clean, ['name',])
+--- a/tests/regressiontests/forms/tests/fields.py
++++ b/tests/regressiontests/forms/tests/fields.py
+@@ -557,27 +557,6 @@ class FieldsTests(TestCase):
+         self.assertRaisesErrorWithMessage(ValidationError, "[u'Enter a valid URL.']", f.clean, 'http://example.')
+         self.assertRaisesErrorWithMessage(ValidationError, "[u'Enter a valid URL.']", f.clean, 'http://.com')
+ 
+-    def test_urlfield_3(self):
+-        f = URLField(verify_exists=True)
+-        self.assertEqual(u'http://www.google.com/', f.clean('http://www.google.com')) # This will fail if there's no Internet connection
+-        self.assertRaisesErrorWithMessage(ValidationError, "[u'Enter a valid URL.']", f.clean, 'http://example')
+-        self.assertRaises(ValidationError, f.clean, 'http://www.broken.djangoproject.com') # bad domain
+-        self.assertRaises(ValidationError, f.clean, 'http://qa-dev.w3.org/link-testsuite/http.php?code=405') # Method not allowed
+-        try:
+-            f.clean('http://www.broken.djangoproject.com') # bad domain
+-        except ValidationError, e:
+-            self.assertEqual("[u'This URL appears to be a broken link.']", str(e))
+-        self.assertRaises(ValidationError, f.clean, 'http://qa-dev.w3.org/link-testsuite/http.php?code=400') # good domain, bad page
+-        try:
+-            f.clean('http://google.com/we-love-microsoft.html') # good domain, bad page
+-        except ValidationError, e:
+-            self.assertEqual("[u'This URL appears to be a broken link.']", str(e))
+-
+-    def test_urlfield_4(self):
+-        f = URLField(verify_exists=True, required=False)
+-        self.assertEqual(u'', f.clean(''))
+-        self.assertEqual(u'http://www.google.com/', f.clean('http://www.google.com')) # This will fail if there's no Internet connection
+-
+     def test_urlfield_5(self):
+         f = URLField(min_length=15, max_length=20)
+         self.assertRaisesErrorWithMessage(ValidationError, "[u'Ensure this value has at least 15 characters (it has 13).']", f.clean, 'http://f.com')
+@@ -625,12 +604,6 @@ class FieldsTests(TestCase):
+         except ValidationError, e:
+             self.assertEqual("[u'This URL appears to be a broken link.']", str(e))
+ 
+-    def test_urlfield_10(self):
+-        # UTF-8 in the domain.
+-        f = URLField(verify_exists=True)
+-        url = u'http://\u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac.idn.icann.org/\u0391\u03c1\u03c7\u03b9\u03ba\u03ae_\u03c3\u03b5\u03bb\u03af\u03b4\u03b1'
+-        self.assertEqual(url, f.clean(url)) #This will fail without internet.
+-
+     # BooleanField ################################################################
+ 
+     def test_booleanfield_1(self):

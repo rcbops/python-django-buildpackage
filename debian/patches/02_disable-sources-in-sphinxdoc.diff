@@ -1,0 +1,23 @@
+Description: Disable creation of _sources directory by Sphinx
+ We do this to save some space as the sources of the documentation
+ are not really useful in a binary package.
+ .
+ This is a Debian specific patch.
+Forwarded: not-needed
+Author: Raphaël Hertzog <hertzog@debian.org>
+Origin: vendor
+
+--- a/docs/conf.py
++++ b/docs/conf.py
+@@ -158,7 +158,10 @@ html_additional_pages = {}
+ #html_split_index = False
+ 
+ # If true, links to the reST sources are added to the pages.
+-#html_show_sourcelink = True
++html_show_sourcelink = False
++
++# Do not ship a copy of the sources
++html_copy_source = False
+ 
+ # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
+ #html_show_sphinx = True

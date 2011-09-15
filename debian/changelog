@@ -1,0 +1,608 @@
+python-django (1.3.1-1) unstable; urgency=low
+
+  * New upstream release. It includes security updates described here:
+    https://www.djangoproject.com/weblog/2011/sep/09/security-releases-issued/
+    Closes: #641405
+  * Update 01_disable_url_verify_regression_tests.diff and merge
+    07_disable_url_verify_model_tests.diff into it.
+  * Update patch headers to conform to DEP-3.
+  * Apply patch from Steve Langasek to dynamically build the UTF-8
+    locale required by the test-suite instead of build-depending on
+    locales-all. Closes: #630421
+  * Use "dh --with sphinxdoc" to clean up the Sphinx generated documentation
+    and avoid the embedded-javascript-library lintian warning. Build-Depends
+    on python-sphinx >= 1.0.7+dfsg-1 for this and also add
+    ${sphinxdoc:Depends} to python-django-doc Depends field.
+  * Cleanup build-dependencies now that even oldstable has python 2.5.
+  * Switch to dh_python2 as python helper tool. Drop legacy files
+    debian/pyversions and debian/pycompat.
+  * New patch 02_disable-sources-in-sphinxdoc.diff to not generate
+    the _sources directory that we used to remove manually within the rules
+    file. But must be kept disabled until #641710 is fixed.
+  * Properly support DEB_BUILD_OPTIONS=nocheck despite the override
+    of dh_auto_test.
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Thu, 15 Sep 2011 12:43:51 +0200
+
+python-django (1.3-2) unstable; urgency=low
+
+  * Team upload.
+
+  [ Chris Lamb ]
+  * Don't remove "backup~" test file - upstream did ship it; we were just
+    removing it with dh_clean.
+
+  [ Piotr Ożarowski ]
+  * Fix builds with non-default Python versions installed
+  * Bump Standards-Version to 3.9.2 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 02 May 2011 22:23:37 +0200
+
+python-django (1.3-1) unstable; urgency=low
+
+  * New upstream release.
+    - Update 01_disable_url_verify_regression_tests.diff.
+    - Update 07_disable_url_verify_model_tests.diff.
+    - Merge patch from Krzysztof Klimonda to disable more network access tests.
+      (Closes: #598674)
+  * Add workaround for missing "backup~" file in release tarball. See
+    <http://code.djangoproject.com/ticket/15677>.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 24 Mar 2011 15:04:53 +0000
+
+python-django (1.2.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Do not compress objects.inv used by Sphinx generated documentation.
+    Thanks to Michael Fladischer for the report. Closes: #608769 
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Sat, 12 Feb 2011 08:59:33 +0100
+
+python-django (1.2.4-1) unstable; urgency=high
+
+  * New bugfix-only upstream release. It includes security fixes.
+    http://www.djangoproject.com/weblog/2010/dec/22/security/
+  * Drop patches merged upstream:
+    - debian/patches/05_fix_regression_tests.diff
+    - debian/patches/06_fix_regression_tests.diff
+  * Update 01_disable_url_verify_regression_tests.diff to cope with the
+    updated regressions tests.
+  * Update 03_manpage.diff and 04_hyphen-manpage.diff to cope with changes in
+    the manual page.
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Fri, 31 Dec 2010 11:40:28 +0100
+
+python-django (1.2.3-2) unstable; urgency=low
+
+  * Team upload.
+  * Disable model tests that require an internet connection.
+    Closes: #601070
+  * Include python.mk conditionally as explained in its header.
+    Helps backports to Lenny which has no python.mk.
+    Closes: #601608
+
+ -- Evgeni Golov <evgeni@debian.org>  Thu, 28 Oct 2010 12:37:15 +0200
+
+python-django (1.2.3-1) unstable; urgency=low
+
+  [ Krzysztof Klimonda ]
+  * New upstream release. Closes: #596893 LP: #636482
+  * Fixes both a XSS vulnerability introduced in 1.2 series and
+    the regressions caused by 1.2.2 release. Closes: #596205
+  * debian/control:
+    - depend on language packs for en_US.utf8 locales required for unit tests.
+  * debian/rules:
+    - re-enable build time tests.
+    - set LC_ALL to en_US.utf8 for test suite.
+  * debian/patches/series:
+    - two new patches: 05_fix_regression_tests.diff and
+      06_fix_regression_tests.diff backported from 1.2.x branch to fix
+      test suite failures.
+
+  [ Raphaël Hertzog ]
+  * Update Standards-Version to 3.9.1.
+  * Drop "--with quilt" and quilt build-dependency since the package is
+    already using source format "3.0 (quilt)".
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Sat, 18 Sep 2010 19:37:03 +0200
+
+python-django (1.2.1-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 24 May 2010 22:44:32 +0100
+
+python-django (1.2-1) unstable; urgency=low
+
+  * New upstream stable release.
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 21 May 2010 07:52:55 +0100
+
+python-django (1.2~rc1-1) experimental; urgency=low
+
+  * New upstream release candidate.
+  * Remove "02-embedded_code_copies.diff" - not needed anymore.
+  * Refresh "01_disable_url_verify_regression_tests.diff".
+  * Refresh "04_hyphen-manpage.diff".
+  * Temporarily disable test runner due to failing date-related tests.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 06 May 2010 10:25:10 +0100
+
+python-django (1.2~beta1-1) experimental; urgency=low
+
+  * New upstream development release.
+  * Switch to dpkg-source 3.0 (quilt) format
+  * Bump Standards-Version to 3.8.4.
+  * Remove "0.96 -> 1.x" NEWS entry.
+  * jQuery added to admin system upstream:
+    - Add libjs-jquery to python-django's Recommends
+    - Use symlinks so we use the version from libjs-query over an embedded code
+      copy.
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 09 Feb 2010 13:47:34 +0000
+
+python-django (1.2~alpha1-1) experimental; urgency=low
+
+  * New upstream development release:
+
+     This is the first in a series of preview/development releases leading up
+     to the eventual release of Django 1.2, currently scheduled to take place
+     in March 2010. 
+
+     <http://docs.djangoproject.com/en/dev//releases/1.2-alpha-1/>
+
+  * Update "01_disable_url_verify_regression_tests.diff" - tests now use the
+    unittest module instead of doctests.
+  * Update "02-embedded_code_copies.diff".
+  * Remove "05_ftbfs_in_november.diff" - applied upstream.
+  * Remove "06_python_2.6.3_regression.diff" - applied upstream.
+  * Update dh_auto_test - database engine is set differently in 1.2.
+  * Remove useless ._DS_Store files.
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 06 Jan 2010 14:34:37 +0000
+
+python-django (1.1.1-2) unstable; urgency=low
+
+  * Remove embedded "decimal" code copy and use system version instead. The
+    "doctest" code copy cannot be removed as parts of Django depend on modified
+    behaviour. (Closes: #555419)
+  * Fix FTBFS in November by applying patch from upstream bug #12125.
+    (Closes: #555931)
+  * Fix FTBFS under Python 2.6.3 by applying patch from upstream bug #11993.
+    (Closes: #555969)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 01 Dec 2009 23:46:22 +0000
+
+python-django (1.1.1-1) unstable; urgency=high
+
+  * New upstream security release - fixes pathological regular expression
+    backtracking performance in URL and email fields which can be used as part
+    of a denial of service attack.
+  * Set Maintainer: to myself with thanks to Brett Parker.
+  * Bump versioned build dependency on quilt to help backporters.
+    (Closes: #547955)
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 10 Oct 2009 10:17:52 +0100
+
+python-django (1.1-4) unstable; urgency=low
+
+  * Sourceful upload to drop dependency on Python 2.4.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 24 Aug 2009 08:16:11 +0100
+
+python-django (1.1-3) unstable; urgency=low
+
+  * Disable regression tests that require an internet connection. Patch by
+    Krzysztof Klimonda <kklimonda@syntaxhighlighted.com>. (Closes: #542996)
+  * Bump Standards-Version to 3.8.3.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 23 Aug 2009 18:13:18 +0100
+
+python-django (1.1-2) unstable; urgency=low
+
+  * Run testsuite on build.
+  * Use "--with quilt" over specifying $(QUILT_STAMPFN)/unpatch dependencies.
+  * Override clean target correctly.
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 14 Aug 2009 08:06:29 +0100
+
+python-django (1.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Merge from experimental:
+    - Ship FastCGI initscript and /etc/default file in python-django's examples
+      directory (Closes: #538863)
+    - Drop "05_10539-sphinx06-compatibility.diff"; it has been applied
+      upstream.
+    - Bump Standards-Version to 3.8.2.
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 29 Jul 2009 11:26:28 +0200
+
+python-django (1.0.2-7) unstable; urgency=low
+
+  * Fix compatibility with Python 2.6 and Python transitions in general.
+    Thanks to Krzysztof Klimonda <kklimonda@syntaxhighlighted.com>.
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 16 May 2009 00:09:47 +0100
+
+python-django (1.0.2-6) unstable; urgency=low
+
+  * Backport patch from <http://code.djangoproject.com/ticket/10539> to fix
+    FTBFS when using python-sphinx >= 0.6. (Closes: #527492)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 10 May 2009 22:11:09 +0100
+
+python-django (1.0.2-5) unstable; urgency=low
+
+  * Fix issue where newly created projects do not have their manage.py file
+    executable.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 26 Mar 2009 23:42:14 +0000
+
+python-django (1.0.2-4) unstable; urgency=low
+
+  * Programatically replace most references to "django-admin.py" with
+    "django-admin" in the generated documentation. (Closes: #519937)
+  * Bump Standards-Version to 3.8.1; no changes.
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 24 Mar 2009 00:50:26 +0000
+
+python-django (1.0.2-3) unstable; urgency=low
+
+  * Split documentation into a separate python-django-doc package due to size
+    (approximately 6Mb).
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 10 Mar 2009 21:13:57 +0000
+
+python-django (1.0.2-2) unstable; urgency=low
+
+  * Don't rely on the internal layout of python-support. (Closes: #517052)
+  * Move to debhelper-based packaging for operational clarity:
+    - Remove bashisms from binary-post-install.
+    - Use quilt instead of simple-patchsys.mk and adjust existing patches so
+      that we can apply with -p1 for the "quilt" source package type.
+  * Adjust Build-Depends:
+    - Bump debhelper requirement 7.0.50 for override_* feature.
+    - Drop cdbs, python-dev and python-setuptools requirement.
+    - Just Build-Depend on `python', not `python-dev'.
+    - Drop versions on Build-Depends where they are satisfied in current
+      oldstable (ie. etch).
+  * debian/control:
+    - Add python-sqlite to Suggests.
+    - Remove repeated 'Priority' line in binary package stanza.
+    - Update crufty long and short descriptions.
+    - Add ${misc:Depends} in binary stanza for debhelper-using package.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 08 Mar 2009 06:01:59 +0000
+
+python-django (1.0.2-1) unstable; urgency=low
+
+  [ Chris Lamb ]
+  * New upstream bugfix release. Closes: #505783
+  * Add myself to Uploaders with ACK from Brett.
+
+  [ David Spreen ]
+  * Remove python-pysqlite2 from Recommends because Python 2.5 includes
+    sqlite library used by Django. Closes: 497886
+
+  [ Sandro Tosi ]
+  * debian/control
+    - switch Vcs-Browser field to viewsvn
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 19 Nov 2008 21:31:00 +0000
+
+python-django (1.0-1) unstable; urgency=low
+
+  [ David Spreen ]
+  * New _stable_ upstream release.
+
+  [ Raphael Hertzog ]
+  * This version fixes the latest security issue:
+    http://www.djangoproject.com/weblog/2008/sep/02/security/
+    Closes: #497765
+  * Don't include source files of documentation in the binary package,
+    keep only the HTML version.
+  * Updated README.Debian with information about the switch from 0.96 to
+    1.0.
+  * Remove execute right on /etc/bash_completion.d/django_bash_completion
+  * Add debian/patches/04_hyphen-manpage.diff to fix a lintian message
+    (hyphen-used-as-minus-sign usr/share/man/man1/django-admin.1.gz:156).
+  * Don't compress javascript files.
+  * Add libjs-jquery to Recommends since it's used by the HTML
+    documentation.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 04 Sep 2008 08:33:32 +0200
+
+python-django (1.0~beta2+ds-1) unstable; urgency=low
+
+  * Bumping up upstream version to push sources into unstable.
+    (Thanks to Raphael Hertzog).
+
+ -- David Spreen <netzwurm@debian.org>  Sat, 30 Aug 2008 20:56:09 -0700
+
+python-django (1.0~beta2-3) unstable; urgency=low
+
+  [ David Spreen ]
+  * Updated the copyright information to include copyright and 
+    licenses for individual contributions. 
+  * Added the documentation to the main python-django package:
+  * debian/python-django.install
+    - Added installation of html documentation.
+  * debian/python-django.doc-base
+    - Added.
+  * debian/control
+    - Added Build-Depends-Indep on python-sphinx and libjs-jquery.
+  * debian/rules
+    - Readded code to build documentation.
+    - Readded code to link to libjs-jquery.
+  * debian/NEWS
+    - Fixed format.
+    - Added more comprehensive list of changes and references to 
+      local documentation as well as the wiki pages for 
+      backwards-incompatible changes.
+  * debian/python-django.docs
+    - Removed docs/*.txt since those are templates for the 
+      generated docs now included with doc-base.
+  
+ -- David Spreen <netzwurm@debian.org>  Fri, 29 Aug 2008 09:20:45 -0700
+
+python-django (1.0~beta2-2) unstable; urgency=low
+
+  [ David Spreen ]
+  * Removed all -doc related files temporarily to push beta2 into 
+    unstable for extensive testing. The -doc package will be 
+    readded once this package is in unstable as recommended in
+    http://lists.debian.org/debian-release/2008/08/msg01475.html.
+  * debian/python-django-doc.install
+    - Removed.
+  * debian/python-django-doc.doc-base
+    - Removed.
+  * debian/python-django-doc.examples
+    - Moved to python-django.examples.
+  * debian/rules
+    - Removed python-doc related build and post-installation.
+  * debian/control
+    - Removed binary package python-django-doc.
+    - Removed Build-Depends-Indep on python-sphinx and libjs-jquery.
+  * debian/python-django.install:
+    - Removed multiple package related issues.
+
+ -- David Spreen <netzwurm@debian.org>  Thu, 28 Aug 2008 20:15:21 -0700
+
+python-django (1.0~beta2-1) experimental; urgency=low
+
+  [ David Spreen ]
+  * The `hooray for the documentation' release!
+  * New upstream beta release. 
+  * debian/control 
+    - Updated standards version.
+    - Added python-sphinx and libjs-jquery.
+    - Added python-django-doc package depending on libjs-jquery.
+  * debian/docs
+    - Moved to debian/python-django.docs.
+  * debian/install
+    - Moved to debian/python-django.install.
+  * debian/manpages
+    - Moved to debian/python-django.manpages.
+  * debian/examples
+    - Moved to debian/python-django-doc.examples
+  * debian/README.Debian
+    - Moved to debian/python-django.README.Debian
+  * debian/python-django-doc.doc-base:
+    - Added doc-base file for the documentation.
+  * debian/python-django-doc.install:
+    - Added install file for sphinx generated documentation.
+  * debian/rules:
+    - Added code to generate documentation with sphinx and 
+      replace convenience file of jquery.js with the respective
+      symlink to libjs-jquery.
+  
+ -- David Spreen <netzwurm@debian.org>  Thu, 28 Aug 2008 10:22:29 -0700
+
+python-django (1.0~beta1-1) experimental; urgency=low
+
+  [ David Spreen ]
+  * New upstream beta release. Closes: #492956
+  * debian/control: Added myself to Uploaders field.
+  * debian/watch: Added mangling for filename and version. Old watch file would 
+    name the download 'tarball'. Also added mangling to handle alpha and beta 
+    versioning.
+  * Drop debian/patches/01_add_shebang.diff as this has been fixed upstream.
+  * Drop debian/patches/02_bash_completion.diff as this has been committed
+    upstream http://code.djangoproject.com/ticket/7268.
+  * debian/control: Added python-flup to the Suggest field. Closes: #488123
+  * debian/patches/03_manpage.diff: Adapted patch to new upstream version.
+  
+  [ Jan Dittberner ]
+  * add debian/watch file.
+  
+ -- David Spreen <netzwurm@debian.org>  Fri, 15 Aug 2008 16:05:07 -0700
+
+python-django (0.97~svn7534-1) experimental; urgency=low
+
+  * New upstream snapshot. Closes: #409565, #481051
+    - Include an XSS security fix (CVE-2008-2302). Closes: #481164
+  * Drop debian/patches/04_pg_version_fix.diff as another fix
+    has been committed upstream (see http://code.djangoproject.com/ticket/6433
+    and http://code.djangoproject.com/changeset/7415).
+  * Add some headers to the remaining patches.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Mon, 19 May 2008 23:41:50 +0200
+
+python-django (0.97~svn7189-1) experimental; urgency=low
+
+  * New upstream snapshot including bash completion fix
+    Closes: #450913
+
+ -- Brett Parker <iDunno@sommitrealweird.co.uk>  Sun, 02 Mar 2008 12:59:03 +0000
+
+python-django (0.97~svn7047-2) experimental; urgency=low
+
+  [ Brett Parker ]
+  * Patch for postgresql version issue with 8.3 beta/rc releases
+    Closes: #462058
+
+  [ Raphael Hertzog ]
+  * Updated Standards-Version to 3.7.3.
+  * Adjusted build-dependency on python-setuptools to strip the -1 part.
+
+ -- Brett Parker <iDunno@sommitrealweird.co.uk>  Wed,  6 Feb 2008 15:15:37 +0000
+
+python-django (0.97~svn7047-1) experimental; urgency=low
+
+  * New upstream snapshot (rev 7047)
+  - tarball prepared by Gabriel Falcão Gonçalves de Moura
+    <gabriel@guake-terminal.org>
+
+ -- Gustavo Noronha Silva <kov@debian.org>  Tue, 29 Jan 2008 10:54:47 -0200
+
+python-django (0.97~svn6996-1) experimental; urgency=low
+
+  * New upstream snapshot
+  * debian/control:
+  - added myself to Uploaders
+
+ -- Gustavo Noronha Silva <kov@debian.org>  Sat, 05 Jan 2008 20:53:23 -0200
+
+python-django (0.97~svn6668-2) UNRELEASED; urgency=low
+
+  [ Raphael Hertzog ]
+  * Install examples with dh_installexamples instead of dh_installdocs
+    (change done by Ubuntu) as empty files are kept.
+
+  [ Sandro Tosi ]
+  * debian/control
+    - uniforming Vcs-Browser field
+
+ -- Raphael Hertzog <hertzog@debian.org>  Mon, 17 Dec 2007 09:09:16 +0100
+
+python-django (0.97~svn6668-1) experimental; urgency=low
+
+  * New SVN snapshot (rev 6668)
+    - Auth system delegations
+    - Apps can now have thier own management commands
+    - Fix for CVE-2007-5712 remote denial of service
+      Closes: #448838
+  * Fix missing upstream info in changelog
+    Closes: #450659
+
+ -- Brett Parker <iDunno@sommitrealweird.co.uk>  Sun, 11 Nov 2007 10:15:55 +0000
+
+python-django (0.96+svn6373-1) experimental; urgency=low
+
+  [ Raphael Hertzog ]
+  * New SVN snapshot (rev 6373, a few days after the last Django sprint).
+  * Note: The version 0.96+svn6034-1 never got uploaded.
+  * Rename XS-Vcs* fields to Vcs-* since they are now supported by dpkg.
+
+  [ Piotr Ożarowski ]
+  * XS-Vcs-Browser and Homepage fields added
+
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 04 Oct 2007 14:59:01 +0200
+
+python-django (0.96+svn6034-1) experimental; urgency=low
+
+  [ Brett Parker]
+  * New SVN snapshot (rev 6034).
+     * validate and runserver commands now display the number of errors
+       (returning back to previous functionality).
+     * Small documentation fixes
+     * assertRedirects handling for paths with get data
+     * start{project,app} no make sure files created are writable
+  * Add man page for django-admin to the debian package
+
+ -- Brett Parker <iDunno@sommitrealweird.co.uk>  Sat,  8 Sep 2007 10:37:00 +0100
+
+python-django (0.96+svn6020-1) experimental; urgency=low
+
+  * New SVN snapshot (rev 6020).
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 26 Aug 2007 18:16:08 +0200
+
+python-django (0.96+svn5779-1) experimental; urgency=low
+
+  * SVN snapshot (rev 5779) packaged to experimental as many interesting
+    Django applications rely on newer unreleased features.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Tue, 31 Jul 2007 13:40:18 +0200
+
+python-django (0.96-1) unstable; urgency=low
+
+  [ Brett Parker ]
+  * New upstream release - introduces some backwards incompatible changes, see
+    README.Debian or the backwards incompatible changes page at
+    http://code.djangoproject.com/wiki/BackwardsIncompatibleChanges
+  * Add documentation from upstream to /usr/share/doc/python-django
+    Closes: #411249
+  * Install the bash completion file from extras in to
+    /etc/bash_completion.d/django_bash_completion
+    Closes: #414399
+  * Egg support dropped as it's been dropped by upstream.
+
+ -- Brett Parker <iDunno@sommitrealweird.co.uk>  Sun, 25 Mar 2007 19:18:39 +0100
+
+python-django (0.95.1-1) unstable; urgency=low
+
+  [ Brett Parker ]
+  * New upstream minor release for security bugs:
+    - http://www.djangoproject.com/weblog/2007/jan/21/0951/
+      - Fixes a small security vulnerability in the script Django's
+        internationalization system uses to compile translation files
+        (changeset 4360 in the "0.95-bugfixes" branch).
+      - fix for a bug in Django's authentication middleware which could cause
+        apparent "caching" of a logged-in user (changeset 4361).
+      - patch which disables debugging mode in the flup FastCGI package Django
+        uses to launch its FastCGI server, which prevents tracebacks from
+        bubbling up during production use (changeset 4363).
+    Closes: #407786, #407607
+  * Sets Recommends to python-psycopg and moves other database engines to
+    the Suggests field.
+
+  [ Raphael Hertzog ]
+  * Use python-pysqlite2 as default database engine in Recommends. Others are
+    in Suggests. Closes: #403761
+  * Add python-psycopg2 in Suggests. Closes: #407489
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 21 Jan 2007 17:45:50 +0100
+
+python-django (0.95-3) unstable; urgency=low
+
+  * Integrate 2 upstream changesets:
+    - http://code.djangoproject.com/changeset/3754 as
+      debian/patches/04_sec_fix_auth.diff
+      Fixes a possible case of mis-authentication due to bad caching.
+      Closes: #407521
+    - http://code.djangoproject.com/changeset/3592 as
+      debian/patches/03_sec_fix_compile-messages.diff
+      Fixes an (unlikely) arbitrary command execution if the user is blindly
+      running compile-messages.py on a untrusted set of *.po files.
+      Closes: #407519
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 16 Dec 2006 15:13:29 +0100
+
+python-django (0.95-2) unstable; urgency=low
+
+  [ Piotr Ozarowski ]
+  * Added XS-Vcs-Svn field
+
+  [ Brett Parker ]
+  * Made manage.py get a shebang with the version of python
+    used when running django-admin (closes: #401616)
+  * Created a convenience /usr/lib/python-django/bin symlink.
+
+  [ Raphael Hertzog ]
+  * Adapted Brett's work to better fit my views of the packaging.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 16 Dec 2006 11:03:20 +0100
+
+python-django (0.95-1) unstable; urgency=low
+
+  [ Brett Parker ]
+  * 0.95 release - initial packaging
+
+  [ Raphael Hertzog ]
+  * Fix recommends: s/python-sqlite/python-pysqlite2/
+  * Add debian/pyversions to ensure that we have at least python 2.3 (and to
+    work around bug #391689 of python-support).
+
+ -- Raphael Hertzog <hertzog@debian.org>  Mon,  9 Oct 2006 12:10:27 +0200

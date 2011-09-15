@@ -1,0 +1,3 @@
+version=3
+opts=filenamemangle=s/.*\/download\/(.*)\/tarball\//Django-$1.tar.gz/,uversionmangle=s/-(alpha|beta)-/~$1/ \
+    http://www.djangoproject.com/download/ (.+)/tarball/

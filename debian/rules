@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+
+-include /usr/share/python/python.mk
+ifeq (,$(py_sitename))
+  py_sitename = site-packages
+  py_libdir = /usr/lib/python$(subst python,,$(1))/site-packages
+  py_sitename_sh = $(py_sitename)
+  py_libdir_sh = $(py_libdir)
+endif
+
+
+PREFIX = debian/python-django
+
+%:
+	dh $@ --with sphinxdoc,python2
+
+override_dh_auto_clean:
+	rm -rf docs.debian tests/__init__.py
+	find -name "*.DS_Store" -delete
+	chmod a-x django/contrib/gis/tests/data/texas.dbf
+	dh_auto_clean
+
+override_dh_auto_build:
+	dh_auto_build
+	
+	# Build the HTML documentation.
+	# We programmatically replace most instances of django-admin.py with
+	# django-admin and remove the source files from the target _build.
+	cp -r docs docs.debian
+	find docs.debian -type f -print0 | xargs -0r perl -pi -e 's|(?<!/)(django-admin)\.py|$$1|'
+	make -C docs.debian html
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	touch tests/__init__.py
+	mkdir -p tmp-locales
+	localedef -i /usr/share/i18n/locales/en_US -c -f UTF-8 -A /usr/share/locale/locale.alias tmp-locales/en_US.UTF-8
+	LOCPATH=$(CURDIR)/tmp-locales LC_ALL=en_US.UTF-8 PYTHONPATH=. tests/runtests.py --settings=tests.test_sqlite --verbosity=2
+	rm -rf tmp-locales
+endif
+
+override_dh_clean:
+	# backup~ is used in tests
+	dh_clean -Xbackup~
+
+override_dh_install:
+	dh_install
+	
+	# Use default shebang and m move scripts to /usr/lib/python-django
+	set -e; for ver in $(shell pyversions -vr); do \
+		[ -f /usr/bix/python$$ver ] || continue;\
+		FILE=$(PREFIX)/$(call py_libdir_sh,$$ver)/django/conf/project_template/manage.py; \
+		if [ -f $$FILE ]; then\
+			perl -pi -e 's|^#!/usr/bin/env python.*|#!/usr/bin/python|' $$FILE;\
+			chmod +x $$FILE;\
+		fi;\
+		if [ -d $(PREFIX)/usr/lib/python-django ]; then\
+			rm -rf $(PREFIX)/$(call py_libdir_sh,$$ver)/django/bin;\
+		else\
+			mkdir -p $(PREFIX)/usr/lib/python-django;\
+			mv $(PREFIX)/$(call py_libdir_sh,$$ver)/django/bin $(PREFIX)/usr/lib/python-django;\
+		fi;\
+	done
+	# Fix permissions
+	chmod 644 $(PREFIX)/etc/bash_completion.d/django_bash_completion
+	find $(PREFIX)/usr/lib/python-django/bin/ -name '*.py' -not -name '__init__.py' -print0 | xargs -0r chmod 755
+	
+	# Rename django-admin.py to django-admin
+	mv $(PREFIX)/usr/bin/django-admin.py $(PREFIX)/usr/bin/django-admin
+	
+	# Remove embedded Javascript libraries
+	set -e; for FILENAME in jquery.js jquery.min.js; do \
+		find $(PREFIX) -name $$FILENAME -exec \
+			ln -sf /usr/share/javascript/jquery/$$FILENAME {} \;; \
+	done
+
+override_dh_compress:
+	dh_compress -X.js -Xobjects.inv
