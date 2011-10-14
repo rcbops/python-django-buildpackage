@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Chris Lamb <lamby@debian.org>
 Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>, Raphaël Hertzog <hertzog@debian.org>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 7.0.50), python (>= 2.6.6-3~), python-sphinx (>= 1.0.7+dfsg), locales
+Build-Depends: debhelper (>= 7.0.50), python (>= 2.6.6-3~), python-sphinx, locales
 Build-Depends-Indep: libjs-jquery
 Homepage: http://www.djangoproject.com/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/python-django/trunk/
