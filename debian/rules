@@ -23,13 +23,16 @@ override_dh_auto_clean:
 
 override_dh_auto_build:
 	dh_auto_build
-	
+
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
+override_dh_installdocs:
 	# Build the HTML documentation.
 	# We programmatically replace most instances of django-admin.py with
 	# django-admin and remove the source files from the target _build.
 	cp -r docs docs.debian
 	find docs.debian -type f -print0 | xargs -0r perl -pi -e 's|(?<!/)(django-admin)\.py|$$1|'
 	make -C docs.debian html
+endif
 
 override_dh_auto_test:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
@@ -51,7 +54,7 @@ override_dh_clean:
 
 override_dh_install:
 	dh_install
-	
+
 	# Use default shebang and m move scripts to /usr/lib/python-django
 	set -e; for ver in $(shell pyversions -vr); do \
 		[ -f /usr/bix/python$$ver ] || continue;\
@@ -70,10 +73,10 @@ override_dh_install:
 	# Fix permissions
 	chmod 644 $(PREFIX)/etc/bash_completion.d/django_bash_completion
 	find $(PREFIX)/usr/lib/python-django/bin/ -name '*.py' -not -name '__init__.py' -print0 | xargs -0r chmod 755
-	
+
 	# Rename django-admin.py to django-admin
 	mv $(PREFIX)/usr/bin/django-admin.py $(PREFIX)/usr/bin/django-admin
-	
+
 	# Remove embedded Javascript libraries
 	set -e; for FILENAME in jquery.js jquery.min.js; do \
 		find $(PREFIX) -name $$FILENAME -exec \
