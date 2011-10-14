@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+export DH_VERBOSE=1
 
 -include /usr/share/python/python.mk
 ifeq (,$(py_sitename))
@@ -37,6 +38,11 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	localedef -i /usr/share/i18n/locales/en_US -c -f UTF-8 -A /usr/share/locale/locale.alias tmp-locales/en_US.UTF-8
 	LOCPATH=$(CURDIR)/tmp-locales LC_ALL=en_US.UTF-8 PYTHONPATH=. tests/runtests.py --settings=tests.test_sqlite --verbosity=2
 	rm -rf tmp-locales
+endif
+
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
+override_dh_installdocs:
+	dh_installdocs
 endif
 
 override_dh_clean:
