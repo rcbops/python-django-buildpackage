@@ -24,8 +24,8 @@ override_dh_auto_clean:
 override_dh_auto_build:
 	dh_auto_build
 
-ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 override_dh_installdocs:
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 	# Build the HTML documentation.
 	# We programmatically replace most instances of django-admin.py with
 	# django-admin and remove the source files from the target _build.
@@ -43,8 +43,8 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	rm -rf tmp-locales
 endif
 
-ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 override_dh_installdocs:
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 	dh_installdocs
 endif
 
