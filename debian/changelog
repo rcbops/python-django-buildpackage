@@ -1,3 +1,9 @@
+python-django (1.3.1-1.3) unstable; urgency=low
+
+  * add rcb-component in prep for essex-e0 drop
+
+ -- Ron Pedde <rcb-deploy@lists.rackspace.com>  Fri, 28 Oct 2011 09:45:01 -0500
+
 python-django (1.3.1-1.2) unstable; urgency=low
 
   * bump version number for clean builds on maverick and natty
@@ -67,7 +73,7 @@ python-django (1.2.5-1) unstable; urgency=low
 
   * New upstream release.
   * Do not compress objects.inv used by Sphinx generated documentation.
-    Thanks to Michael Fladischer for the report. Closes: #608769 
+    Thanks to Michael Fladischer for the report. Closes: #608769
 
  -- Raphaël Hertzog <hertzog@debian.org>  Sat, 12 Feb 2011 08:59:33 +0100
 
@@ -160,7 +166,7 @@ python-django (1.2~alpha1-1) experimental; urgency=low
 
      This is the first in a series of preview/development releases leading up
      to the eventual release of Django 1.2, currently scheduled to take place
-     in March 2010. 
+     in March 2010.
 
      <http://docs.djangoproject.com/en/dev//releases/1.2-alpha-1/>
 
@@ -336,8 +342,8 @@ python-django (1.0~beta2+ds-1) unstable; urgency=low
 python-django (1.0~beta2-3) unstable; urgency=low
 
   [ David Spreen ]
-  * Updated the copyright information to include copyright and 
-    licenses for individual contributions. 
+  * Updated the copyright information to include copyright and
+    licenses for individual contributions.
   * Added the documentation to the main python-django package:
   * debian/python-django.install
     - Added installation of html documentation.
@@ -350,20 +356,20 @@ python-django (1.0~beta2-3) unstable; urgency=low
     - Readded code to link to libjs-jquery.
   * debian/NEWS
     - Fixed format.
-    - Added more comprehensive list of changes and references to 
-      local documentation as well as the wiki pages for 
+    - Added more comprehensive list of changes and references to
+      local documentation as well as the wiki pages for
       backwards-incompatible changes.
   * debian/python-django.docs
-    - Removed docs/*.txt since those are templates for the 
+    - Removed docs/*.txt since those are templates for the
       generated docs now included with doc-base.
-  
+
  -- David Spreen <netzwurm@debian.org>  Fri, 29 Aug 2008 09:20:45 -0700
 
 python-django (1.0~beta2-2) unstable; urgency=low
 
   [ David Spreen ]
-  * Removed all -doc related files temporarily to push beta2 into 
-    unstable for extensive testing. The -doc package will be 
+  * Removed all -doc related files temporarily to push beta2 into
+    unstable for extensive testing. The -doc package will be
     readded once this package is in unstable as recommended in
     http://lists.debian.org/debian-release/2008/08/msg01475.html.
   * debian/python-django-doc.install
@@ -386,8 +392,8 @@ python-django (1.0~beta2-1) experimental; urgency=low
 
   [ David Spreen ]
   * The `hooray for the documentation' release!
-  * New upstream beta release. 
-  * debian/control 
+  * New upstream beta release.
+  * debian/control
     - Updated standards version.
     - Added python-sphinx and libjs-jquery.
     - Added python-django-doc package depending on libjs-jquery.
@@ -406,10 +412,10 @@ python-django (1.0~beta2-1) experimental; urgency=low
   * debian/python-django-doc.install:
     - Added install file for sphinx generated documentation.
   * debian/rules:
-    - Added code to generate documentation with sphinx and 
+    - Added code to generate documentation with sphinx and
       replace convenience file of jquery.js with the respective
       symlink to libjs-jquery.
-  
+
  -- David Spreen <netzwurm@debian.org>  Thu, 28 Aug 2008 10:22:29 -0700
 
 python-django (1.0~beta1-1) experimental; urgency=low
@@ -417,18 +423,18 @@ python-django (1.0~beta1-1) experimental; urgency=low
   [ David Spreen ]
   * New upstream beta release. Closes: #492956
   * debian/control: Added myself to Uploaders field.
-  * debian/watch: Added mangling for filename and version. Old watch file would 
-    name the download 'tarball'. Also added mangling to handle alpha and beta 
+  * debian/watch: Added mangling for filename and version. Old watch file would
+    name the download 'tarball'. Also added mangling to handle alpha and beta
     versioning.
   * Drop debian/patches/01_add_shebang.diff as this has been fixed upstream.
   * Drop debian/patches/02_bash_completion.diff as this has been committed
     upstream http://code.djangoproject.com/ticket/7268.
   * debian/control: Added python-flup to the Suggest field. Closes: #488123
   * debian/patches/03_manpage.diff: Adapted patch to new upstream version.
-  
+
   [ Jan Dittberner ]
   * add debian/watch file.
-  
+
  -- David Spreen <netzwurm@debian.org>  Fri, 15 Aug 2008 16:05:07 -0700
 
 python-django (0.97~svn7534-1) experimental; urgency=low
