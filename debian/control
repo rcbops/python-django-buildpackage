@@ -10,7 +10,7 @@ Build-Depends-Indep: libjs-jquery
 Homepage: http://www.djangoproject.com/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/python-django/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/python-django/trunk/
-XCBS-RCB-Component: diablo-d5
+XCBS-RCB-Component: diablo-final
 
 Package: python-django
 Architecture: all
